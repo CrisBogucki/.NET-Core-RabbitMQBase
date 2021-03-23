@@ -1,6 +1,9 @@
 # .NET-Core-RabbitMQBase
 RabbitMQBase for Microservice as WorkerService
 
+### Download and run RabbitMQ from docker 
+`docker run -d -p 15672:15672 -p 5672:5672 -p 5671:5671 --hostname rabbitmq-host --name rabbitmq-container rabbitmq` 
+
 ### AppSetting.json
 
 ```json
