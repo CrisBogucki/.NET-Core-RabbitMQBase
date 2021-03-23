@@ -6,7 +6,7 @@ RabbitMQBase for Microservice as WorkerService
 ```json
 {
   "ServiceConf": {
-    "Name": "i-sample-microservice"
+    "Name": "i-log"
   },
   "Rabbit": {
     "User": "guest",
@@ -16,7 +16,7 @@ RabbitMQBase for Microservice as WorkerService
       "rabbit-2"
     ],
     "VHost": "/",
-    "Exchange": "ex.sys"
+    "Exchange": "log"
   },
   "Logging": {
     "LogLevel": {
@@ -26,6 +26,7 @@ RabbitMQBase for Microservice as WorkerService
     }
   }
 }
+
 ```
 
 ### Main class
@@ -41,16 +42,14 @@ static async Task Main(string[] args)
                 .ConfigureServices((hostContext, services) =>
                 {
                     services.AddTransient<IBaseAsyncProducer, BaseAsyncProducer>();
-                    services.AddHostedService<Service02>();
-                    services.AddHostedService<Service01>();
+                    services.AddHostedService<ServiceLogAll>();
+                    services.AddHostedService<ServiceLogInfo>();
                 });
             Console.WriteLine($"info: Running microservice {Tools.GetAppSettingsValueString("ServiceConf", "Name")} " +
                               $"version: {Tools.GetVersionString()}");
-
             Console.WriteLine($"info: Exchange   : {Tools.GetAppSettingsValueString("Rabbit", "Exchange")}");
             Console.WriteLine($"info: ---------------------------------------------");
 
             return host;
         }
-
 ```
