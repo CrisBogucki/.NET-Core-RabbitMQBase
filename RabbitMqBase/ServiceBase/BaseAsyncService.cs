@@ -14,7 +14,8 @@ namespace RabbitMqBase.ServiceBase
     public abstract class BaseAsyncService<TRequest> : BaseAsyncBackgroundService
     {
         protected BaseAsyncService(ILogger<BaseAsyncService<TRequest>> logger) : base(logger)
-        { }
+        {
+        }
 
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
         {
@@ -54,7 +55,8 @@ namespace RabbitMqBase.ServiceBase
     public abstract class BaseAsyncService<TRequest, TResponce> : BaseAsyncBackgroundService
     {
         protected BaseAsyncService(ILogger<BaseAsyncService<TRequest, TResponce>> logger) : base(logger)
-        { }
+        {
+        }
 
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
         {
@@ -79,7 +81,15 @@ namespace RabbitMqBase.ServiceBase
                     byte[] responseBytes = Encoding.UTF8.GetBytes(responseString);
 
                     Channel.BasicAck(ea.DeliveryTag, false);
-                    Channel.BasicPublish(exchange: "", routingKey: ea.BasicProperties.ReplyTo , basicProperties: ea.BasicProperties, body: responseBytes);
+                    if (ea.BasicProperties.ReplyTo != null)
+                    {
+                        Channel.BasicPublish(exchange: "", routingKey: ea.BasicProperties.ReplyTo,
+                            basicProperties: ea.BasicProperties, body: responseBytes);
+                    }
+                    else
+                    {
+                        Logger.LogWarning("Brak zdefiniowanej kolejki zwrotnej");
+                    }
                 }
                 catch (JsonException)
                 {

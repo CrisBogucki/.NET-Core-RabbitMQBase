@@ -25,6 +25,7 @@ namespace Microservice
                     services.AddTransient<IBaseAsyncProducer, BaseAsyncProducer>();
                     services.AddHostedService<ServiceLogAll>();
                     services.AddHostedService<ServiceLogInfo>();
+                    services.AddHostedService<ServiceLogError>();
                 });
             Console.WriteLine($"info: Running microservice {Tools.GetAppSettingsValueString("ServiceConf", "Name")} " +
                               $"version: {Tools.GetVersionString()}");
